@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../context/ToastContext.jsx";
@@ -10,10 +11,19 @@ export default function LoginForm() {
 
   const mutation = useMutation({
     mutationFn: login,
-    // TODO (Task 3): on success, fire a success toast (e.g. "Welcome back!")
-    onSuccess: () => {},
-    // TODO (Task 3): on error, read error.response?.data?.message and fire an error toast
-    onError: () => {},
+
+    // Show a success toast after a successful login.
+    onSuccess: () => {
+      showToast("Welcome back!", "success");
+    },
+
+    // Show an error toast if login fails.
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || "Login failed. Please try again.";
+
+      showToast(message, "error");
+    },
   });
 
   function handleSubmit(e) {

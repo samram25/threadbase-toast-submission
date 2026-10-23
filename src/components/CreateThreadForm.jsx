@@ -1,3 +1,4 @@
+
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "../context/ToastContext.jsx";
@@ -9,11 +10,19 @@ export default function CreateThreadForm() {
 
   const mutation = useMutation({
     mutationFn: createThread,
-    // TODO (Task 3): on success, fire a green toast: showToast("Thread posted!", "success")
-    onSuccess: () => {},
-    // TODO (Task 3): on error, read error.response?.data?.message (fall back to a generic
-    //   string) and fire a red toast: showToast(message, "error")
-    onError: () => {},
+
+    // Show a green toast when the thread is created successfully.
+    onSuccess: () => {
+      showToast("Thread posted!", "success");
+    },
+
+    // Show a red toast if creating the thread fails.
+    onError: (error) => {
+      const message =
+        error.response?.data?.message || "Failed to create thread. Please try again.";
+
+      showToast(message, "error");
+    },
   });
 
   function handleSubmit(e) {

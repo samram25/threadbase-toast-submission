@@ -1,13 +1,33 @@
+
 export default function ToastContainer({ toasts, onDismiss }) {
-  // TODO (Task 2): render the toasts.
-  //   - wrap them in a <div className="toast-container"> (already fixed-position in index.css)
-  //   - map over `toasts`; for each toast render a <div>:
-  //       key   = toast.id
-  //       class = `toast toast-${toast.type}`   (so success/error/info look different)
-  //       onClick = () => onDismiss(toast.id)    (click to dismiss early)
-  //       text  = toast.message
-  //   - add role="status" for accessibility
-  //
-  // Right now it renders nothing, so no toasts appear even when the state has them.
-  return null;
+  if (toasts.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="toast-container">
+      {toasts.map((toast) => (
+        <div
+          key={toast.id}
+          className={`toast toast-${toast.type}`}
+          role="alert"
+          onClick={() => onDismiss(toast.id)}
+        >
+          <span className="toast-message">{toast.message}</span>
+
+          <button
+            type="button"
+            className="toast-dismiss"
+            aria-label="Dismiss notification"
+            onClick={(event) => {
+              event.stopPropagation();
+              onDismiss(toast.id);
+            }}
+          >
+            ×
+          </button>
+        </div>
+      ))}
+    </div>
+  );
 }
